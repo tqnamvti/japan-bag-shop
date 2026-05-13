@@ -1,8 +1,14 @@
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
-import { products } from "@/data/products";
+import { supabase } from "@/lib/supabase";
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  const { data: products, error } = await supabase.from("products").select("*");
+
+  if (error) {
+    return <main className="p-4">Error loading products</main>;
+  }
+
   return (
     <>
       <Navbar />

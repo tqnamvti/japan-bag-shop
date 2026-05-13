@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
-import { products } from "@/data/products";
+import { supabase } from "@/lib/supabase";
 
 type Props = {
   params: Promise<{
@@ -11,10 +11,20 @@ type Props = {
 export default async function ProductDetailPage({ params }: Props) {
   const { id } = await params;
 
-  const product = products.find((item) => item.id === Number(id));
+  const { data: product, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("id", id)
+    .single();
 
-  if (!product) {
-    return <main className="p-4">Product not found</main>;
+  if (error || !product) {
+    return (
+      <>
+        <Navbar />
+
+        <main className="p-4">Product not found</main>
+      </>
+    );
   }
 
   return (
@@ -79,6 +89,7 @@ export default async function ProductDetailPage({ params }: Props) {
               bg-black
               py-4
               text-white
+
               md:w-auto
               md:px-8
             "
