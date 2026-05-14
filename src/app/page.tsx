@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
+import OrderForm from "@/components/OrderForm";
 import { supabase } from "@/lib/supabase";
 
 export default async function HomePage() {
@@ -21,12 +22,12 @@ export default async function HomePage() {
             Order từ Nhật Bản về Việt Nam
           </p>
           <h1 className="mb-5 text-3xl font-bold leading-tight md:text-6xl">
-            Túi Xách Nhật Bản
+            Túi Xách & Mỹ Phẩm
             <br />
-            <span className="text-stone-300">Chính Hãng</span>
+            <span className="text-stone-300">Nhật Chính Hãng</span>
           </h1>
           <p className="mx-auto mb-8 max-w-md text-sm text-stone-400 md:text-lg">
-            Coach, Gucci, Furla, Michael Kors — hàng nội địa Nhật tuyển chọn,
+            Túi xách cao cấp & mỹ phẩm nội địa Nhật — hàng authentic tuyển chọn,
             ship tận nhà toàn quốc.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
@@ -52,7 +53,7 @@ export default async function HomePage() {
       {products && products.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 py-10 md:py-16">
           <div className="mb-6 flex items-center justify-between gap-4">
-            <h2 className="text-xl font-bold md:text-2xl">Sản phẩm nổi bật</h2>
+            <h2 className="text-xl font-bold md:text-2xl">Mới nhất</h2>
             <Link
               href="/products"
               className="shrink-0 whitespace-nowrap text-sm text-gray-500 transition hover:text-black"
@@ -73,6 +74,20 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Order theo yêu cầu */}
+      <section className="bg-stone-50 py-12">
+        <div className="mx-auto max-w-lg px-4">
+          <div className="mb-6 text-center">
+            <h2 className="text-xl font-bold md:text-2xl">Order theo yêu cầu</h2>
+            <p className="mt-2 text-sm text-gray-500">
+              Thấy sản phẩm đẹp trên mạng? Gửi hình cho chúng tôi —
+              chúng tôi sẽ tìm và order về cho bạn.
+            </p>
+          </div>
+          <OrderForm />
+        </div>
+      </section>
 
       {/* Why us */}
       <section className="bg-stone-50 py-10 md:py-16">

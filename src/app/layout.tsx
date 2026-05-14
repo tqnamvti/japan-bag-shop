@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Japan Bag Shop — Túi xách chính hãng từ Nhật Bản",
-  description: "Order túi xách Coach, Gucci, Furla, Michael Kors hàng nội địa Nhật Bản về Việt Nam. Hàng chính hãng, giá tốt, ship toàn quốc.",
+  title: "Bảo Ngọc Order — Hàng Nhật Chính Hãng",
+  description: "Order túi xách & mỹ phẩm chính hãng từ Nhật Bản về Việt Nam. Hàng authentic, giá tốt, ship toàn quốc.",
 };
 
 export default function RootLayout({

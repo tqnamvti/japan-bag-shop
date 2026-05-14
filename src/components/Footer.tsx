@@ -8,10 +8,10 @@ export default function Footer() {
 
           {/* Giới thiệu */}
           <div>
-            <p className="mb-3 text-lg font-bold text-white">Japan Bag Shop</p>
+            <p className="mb-3 text-lg font-bold text-white">Bảo Ngọc Order</p>
             <p className="text-sm leading-6">
-              Chuyên order túi xách chính hãng từ Nhật Bản về Việt Nam. Hàng
-              authentic, giá tốt, ship toàn quốc.
+              Chuyên order túi xách & mỹ phẩm chính hãng từ Nhật Bản về Việt
+              Nam. Hàng authentic, giá tốt, ship toàn quốc.
             </p>
           </div>
 
@@ -62,7 +62,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 border-t border-stone-800 pt-6 text-center text-xs">
-          © {new Date().getFullYear()} Japan Bag Shop. All rights reserved.
+          © {new Date().getFullYear()} Bảo Ngọc Order. All rights reserved.
         </div>
       </div>
     </footer>

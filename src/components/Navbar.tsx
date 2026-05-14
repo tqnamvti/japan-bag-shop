@@ -17,7 +17,7 @@ export default function Navbar() {
           href="/"
           className="text-xl font-bold"
         >
-          Japan Bag Shop
+          Bảo Ngọc Order
         </Link>
 
         <nav className="flex gap-4 text-sm md:text-base">

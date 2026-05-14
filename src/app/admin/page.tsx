@@ -12,6 +12,14 @@ type Product = {
   price: number;
   image: string;
   description: string;
+  category: string;
+};
+
+type CustomOrder = {
+  id: number;
+  image_url: string;
+  note: string;
+  created_at: string;
 };
 
 export default function AdminPage() {
@@ -23,20 +31,33 @@ export default function AdminPage() {
   const [image, setImage] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("Túi xách");
 
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [fileInputKey, setFileInputKey] = useState(0);
+  const [activeTab, setActiveTab] = useState<"products" | "orders">("products");
+  const [customOrders, setCustomOrders] = useState<CustomOrder[]>([]);
 
   async function fetchProducts() {
-    const { data } = await supabase.from("products").select("*").order("id", {
-      ascending: false,
-    });
+    const { data } = await supabase.from("products").select("*").order("id", { ascending: false });
+    if (data) setProducts(data);
+  }
 
-    if (data) {
-      setProducts(data);
-    }
+  async function fetchCustomOrders() {
+    const { data } = await supabase
+      .from("custom_orders")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (data) setCustomOrders(data);
+  }
+
+  async function handleDeleteOrder(id: number) {
+    const confirmed = confirm("Xác nhận xóa đơn order này?");
+    if (!confirmed) return;
+    await supabase.from("custom_orders").delete().eq("id", id);
+    fetchCustomOrders();
   }
 
   async function handleLogout() {
@@ -66,6 +87,7 @@ export default function AdminPage() {
       } else {
         setIsAuthChecking(false);
         fetchProducts();
+        fetchCustomOrders();
       }
     });
   }, [router]);
@@ -75,6 +97,7 @@ export default function AdminPage() {
     setImage("");
     setFile(null);
     setDescription("");
+    setCategory("Túi xách");
     setEditingId(null);
     setFileInputKey((k) => k + 1);
   }
@@ -110,7 +133,7 @@ export default function AdminPage() {
       if (editingId) {
         const { error: updateError } = await supabase
           .from("products")
-          .update({ name, price: Number(price), image: imageUrl, description })
+          .update({ name, price: Number(price), image: imageUrl, description, category })
           .eq("id", editingId);
 
         if (updateError) {
@@ -130,6 +153,7 @@ export default function AdminPage() {
           price: Number(price),
           image: imageUrl,
           description,
+          category,
         });
 
         if (insertError) {
@@ -178,135 +202,145 @@ export default function AdminPage() {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            placeholder="Tên sản phẩm"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="
-              w-full
-              rounded-xl
-              border
-              p-3
-            "
-          />
-
-          <input
-            type="number"
-            placeholder="Giá (¥)"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            className="
-              w-full
-              rounded-xl
-              border
-              p-3
-            "
-          />
-
-          <input
-            key={fileInputKey}
-            type="file"
-            accept="image/*"
-            onChange={(e) => setFile(e.target.files?.[0] || null)}
-            className="w-full rounded-xl border p-3"
-          />
-
-          <textarea
-            placeholder="Mô tả sản phẩm"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="
-              h-32
-              w-full
-              rounded-xl
-              border
-              p-3
-            "
-          />
-
+        {/* Tabs */}
+        <div className="mb-6 flex gap-2 border-b">
           <button
-            disabled={loading}
-            className="
-    w-full
-    rounded-xl
-    bg-black
-    py-4
-    text-white
-  "
+            onClick={() => setActiveTab("products")}
+            className={`px-4 py-2 text-sm font-medium transition ${
+              activeTab === "products"
+                ? "border-b-2 border-black text-black"
+                : "text-gray-400 hover:text-black"
+            }`}
           >
-            {loading
-              ? "Đang lưu..."
-              : editingId
-                ? "Cập nhật sản phẩm"
-                : "Thêm sản phẩm"}
+            Sản phẩm ({products.length})
           </button>
-        </form>
-        <div className="mt-10 space-y-4">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="
-        flex
-        items-center
-        justify-between
-        rounded-2xl
-        border
-        p-4
-      "
-            >
-              <div className="flex items-center gap-3">
-                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div>
-                  <h2 className="font-bold">{product.name}</h2>
-                  <p className="text-sm text-gray-500">¥{product.price.toLocaleString()}</p>
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    setEditingId(product.id);
-                    setName(product.name);
-                    setPrice(product.price.toString());
-                    setImage(product.image);
-                    setDescription(product.description);
-                  }}
-                  className="
-    rounded-xl
-    bg-blue-500
-    px-4
-    py-2
-    text-white
-  "
-                >
-                  Sửa
-                </button>
-
-                <button
-                  onClick={() => handleDelete(product.id)}
-                  className="
-    rounded-xl
-    bg-red-500
-    px-4
-    py-2
-    text-white
-  "
-                >
-                  Xóa
-                </button>
-              </div>
-            </div>
-          ))}
+          <button
+            onClick={() => setActiveTab("orders")}
+            className={`px-4 py-2 text-sm font-medium transition ${
+              activeTab === "orders"
+                ? "border-b-2 border-black text-black"
+                : "text-gray-400 hover:text-black"
+            }`}
+          >
+            Đơn order ({customOrders.length})
+          </button>
         </div>
+
+        {activeTab === "products" && (
+          <>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full rounded-xl border p-3 text-sm"
+              >
+                <option value="Túi xách">Túi xách</option>
+                <option value="Mỹ phẩm">Mỹ phẩm</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Tên sản phẩm"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full rounded-xl border p-3"
+              />
+              <input
+                type="number"
+                placeholder="Giá (¥)"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                className="w-full rounded-xl border p-3"
+              />
+              <input
+                key={fileInputKey}
+                type="file"
+                accept="image/*"
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
+                className="w-full rounded-xl border p-3"
+              />
+              <textarea
+                placeholder="Mô tả sản phẩm"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="h-32 w-full rounded-xl border p-3"
+              />
+              <button
+                disabled={loading}
+                className="w-full rounded-xl bg-black py-4 text-white"
+              >
+                {loading ? "Đang lưu..." : editingId ? "Cập nhật sản phẩm" : "Thêm sản phẩm"}
+              </button>
+            </form>
+
+            <div className="mt-10 space-y-4">
+              {products.map((product) => (
+                <div key={product.id} className="flex items-center justify-between rounded-2xl border p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl">
+                      <Image src={product.image} alt={product.name} fill className="object-cover" />
+                    </div>
+                    <div>
+                      <h2 className="font-bold">{product.name}</h2>
+                      <p className="text-xs text-gray-400">{product.category}</p>
+                      <p className="text-sm text-gray-500">¥{product.price.toLocaleString()}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        setEditingId(product.id);
+                        setName(product.name);
+                        setPrice(product.price.toString());
+                        setImage(product.image);
+                        setDescription(product.description);
+                        setCategory(product.category ?? "Túi xách");
+                      }}
+                      className="rounded-xl bg-blue-500 px-4 py-2 text-white"
+                    >
+                      Sửa
+                    </button>
+                    <button
+                      onClick={() => handleDelete(product.id)}
+                      className="rounded-xl bg-red-500 px-4 py-2 text-white"
+                    >
+                      Xóa
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {activeTab === "orders" && (
+          <div className="space-y-4">
+            {customOrders.length === 0 ? (
+              <p className="py-16 text-center text-gray-400">Chưa có đơn order nào</p>
+            ) : (
+              customOrders.map((order) => (
+                <div key={order.id} className="flex gap-4 rounded-2xl border p-4">
+                  <img
+                    src={order.image_url}
+                    alt="order"
+                    className="h-20 w-20 shrink-0 rounded-xl object-cover"
+                  />
+                  <div className="flex flex-1 flex-col justify-between">
+                    <p className="text-sm text-gray-700">{order.note || "Không có ghi chú"}</p>
+                    <p className="text-xs text-gray-400">
+                      {new Date(order.created_at).toLocaleString("vi-VN")}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleDeleteOrder(order.id)}
+                    className="self-start rounded-xl bg-red-500 px-3 py-1.5 text-sm text-white"
+                  >
+                    Xóa
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        )}
       </main>
     </>
   );
