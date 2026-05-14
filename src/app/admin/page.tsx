@@ -1,6 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Navbar from "@/components/Navbar";
+import { supabase } from "@/lib/supabase";
+
 type Product = {
   id: number;
   name: string;
@@ -8,10 +12,11 @@ type Product = {
   image: string;
   description: string;
 };
-import Navbar from "@/components/Navbar";
-import { supabase } from "@/lib/supabase";
 
 export default function AdminPage() {
+  const router = useRouter();
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
@@ -31,6 +36,12 @@ export default function AdminPage() {
       setProducts(data);
     }
   }
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    router.replace("/login");
+  }
+
   async function handleDelete(id: number) {
     const confirmed = confirm("Delete this product?");
 
@@ -47,59 +58,101 @@ export default function AdminPage() {
   }
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
-async function handleSubmit(e: React.FormEvent) {
-  e.preventDefault()
-  setLoading(true)
-
-  try {
-    if (editingId) { console.log("UPDATE ID:", editingId)
-      // UPDATE
-      const { error: updateError } =
-        await supabase
-          .from("products")
-          .update({
-            name,
-            price: Number(price),
-            image,
-            description,
-          })
-          .eq("id", editingId)
-
-      if (updateError) {
-        alert("Update failed")
-        return
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        router.replace("/login");
+      } else {
+        setIsAuthChecking(false);
+        fetchProducts();
       }
-
-      alert("Product updated!")
-      setEditingId(null)
-      fetchProducts()
-    } else {
-      // CREATE
-      const { error: insertError } =
-        await supabase
-          .from("products")
-          .insert({
-            name,
-            price: Number(price),
-            image,
-            description,
-          })
-
-      if (insertError) {
-        alert("Create failed")
-        return
-      }
-
-      alert("Product created!")
-    }
-
-    fetchProducts()
-  } finally {
-    setLoading(false)
+    });
+  }, [router]);
+  function resetForm() {
+    setName("");
+    setPrice("");
+    setImage("");
+    setFile(null);
+    setDescription("");
+    setEditingId(null);
   }
-}
+
+  async function uploadImage(file: File): Promise<string> {
+    const ext = file.name.split(".").pop();
+    const fileName = `${Date.now()}.${ext}`;
+
+    const { data, error } = await supabase.storage
+      .from("products")
+      .upload(fileName, file, { upsert: true });
+
+    if (error) throw new Error("Upload ảnh thất bại");
+
+    const { data: { publicUrl } } = supabase.storage
+      .from("products")
+      .getPublicUrl(data.path);
+
+    return publicUrl;
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      let imageUrl = image;
+
+      if (file) {
+        imageUrl = await uploadImage(file);
+      }
+
+      if (editingId) {
+        const { error: updateError } = await supabase
+          .from("products")
+          .update({ name, price: Number(price), image: imageUrl, description })
+          .eq("id", editingId);
+
+        if (updateError) {
+          alert("Cập nhật thất bại");
+          return;
+        }
+
+        alert("Cập nhật sản phẩm thành công!");
+      } else {
+        if (!file) {
+          alert("Vui lòng chọn ảnh sản phẩm");
+          return;
+        }
+
+        const { error: insertError } = await supabase.from("products").insert({
+          name,
+          price: Number(price),
+          image: imageUrl,
+          description,
+        });
+
+        if (insertError) {
+          alert("Tạo sản phẩm thất bại");
+          return;
+        }
+
+        alert("Tạo sản phẩm thành công!");
+      }
+
+      resetForm();
+      fetchProducts();
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Đã có lỗi xảy ra");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (isAuthChecking) {
+    return (
+      <div className="flex h-screen items-center justify-center text-gray-500">
+        Đang kiểm tra đăng nhập...
+      </div>
+    );
+  }
 
   return (
     <>
@@ -112,15 +165,15 @@ async function handleSubmit(e: React.FormEvent) {
           p-4
         "
       >
-        <h1
-          className="
-            mb-6
-            text-3xl
-            font-bold
-          "
-        >
-          Admin Dashboard
-        </h1>
+        <div className="mb-6 flex items-center justify-between">
+          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+          <button
+            onClick={handleLogout}
+            className="rounded-xl border px-4 py-2 text-sm hover:bg-gray-100"
+          >
+            Đăng xuất
+          </button>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input

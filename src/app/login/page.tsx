@@ -9,7 +9,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const router = useRouter()
 
-  async function handleLogin(e: React.FormEvent) {
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
     const { error } = await supabase.auth.signInWithPassword({
@@ -38,6 +38,7 @@ export default function LoginPage() {
         <input
           className="w-full border p-2"
           placeholder="Email"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
