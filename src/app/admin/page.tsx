@@ -280,6 +280,7 @@ export default function AdminPage() {
               >
                 <option value="Túi xách">Túi xách</option>
                 <option value="Mỹ phẩm">Mỹ phẩm</option>
+                <option value="Thực phẩm chức năng">Thực phẩm chức năng</option>
               </select>
               <input
                 type="text"

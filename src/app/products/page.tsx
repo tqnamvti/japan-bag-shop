@@ -15,12 +15,13 @@ type Product = {
   category?: string;
 };
 
-const CATEGORIES = ["Tất cả", "Túi xách", "Mỹ phẩm"];
+const CATEGORIES = ["Tất cả", "Túi xách", "Mỹ phẩm", "Thực phẩm chức năng"];
 
 const BRANDS: Record<string, string[]> = {
-  "Tất cả": ["Tất cả", "Coach", "Gucci", "Furla", "Michael Kors", "Shiseido", "SK-II", "Canmake"],
+  "Tất cả": ["Tất cả", "Coach", "Gucci", "Furla", "Shiseido", "SK-II", "Fancl", "DHC"],
   "Túi xách": ["Tất cả", "Coach", "Gucci", "Furla", "Michael Kors", "Prada", "Tory Burch"],
   "Mỹ phẩm": ["Tất cả", "Shiseido", "SK-II", "Canmake", "Cezanne", "KOSE", "Hada Labo"],
+  "Thực phẩm chức năng": ["Tất cả", "Fancl", "DHC", "Asahi", "AFC", "Suntory", "Meiji"],
 };
 
 function ProductsContent() {

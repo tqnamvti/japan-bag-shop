@@ -5,9 +5,10 @@ import OrderForm from "@/components/OrderForm";
 import { supabase } from "@/lib/supabase";
 
 export default async function HomePage() {
-  const [{ data: bags }, { data: cosmetics }, { data: jobPosts }] = await Promise.all([
+  const [{ data: bags }, { data: cosmetics }, { data: supplements }, { data: jobPosts }] = await Promise.all([
     supabase.from("products").select("*").eq("category", "Túi xách").order("id", { ascending: false }).limit(3),
     supabase.from("products").select("*").eq("category", "Mỹ phẩm").order("id", { ascending: false }).limit(3),
+    supabase.from("products").select("*").eq("category", "Thực phẩm chức năng").order("id", { ascending: false }).limit(3),
     supabase.from("job_posts").select("*").order("created_at", { ascending: false }).limit(3),
   ]);
 
@@ -89,6 +90,32 @@ export default async function HomePage() {
           </div>
           <div className="grid grid-cols-3 gap-3 md:gap-4">
             {cosmetics.map((product) => (
+              <ProductCard
+                key={product.id}
+                id={product.id}
+                name={product.name}
+                price={product.price}
+                image={product.image}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Thực phẩm chức năng mới nhất */}
+      {supplements && supplements.length > 0 && (
+        <section className="mx-auto w-full max-w-7xl px-4 py-10 md:py-16">
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <h2 className="text-xl font-bold md:text-2xl">Thực phẩm chức năng</h2>
+            <Link
+              href="/products?category=Thực phẩm chức năng"
+              className="shrink-0 whitespace-nowrap text-sm text-gray-500 transition hover:text-black"
+            >
+              Xem tất cả →
+            </Link>
+          </div>
+          <div className="grid grid-cols-3 gap-3 md:gap-4">
+            {supplements.map((product) => (
               <ProductCard
                 key={product.id}
                 id={product.id}
