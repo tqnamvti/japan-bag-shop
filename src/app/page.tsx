@@ -5,11 +5,11 @@ import OrderForm from "@/components/OrderForm";
 import { supabase } from "@/lib/supabase";
 
 export default async function HomePage() {
-  const { data: products } = await supabase
-    .from("products")
-    .select("*")
-    .order("id", { ascending: false })
-    .limit(4);
+  const [{ data: bags }, { data: cosmetics }, { data: jobPosts }] = await Promise.all([
+    supabase.from("products").select("*").eq("category", "Túi xách").order("id", { ascending: false }).limit(3),
+    supabase.from("products").select("*").eq("category", "Mỹ phẩm").order("id", { ascending: false }).limit(3),
+    supabase.from("job_posts").select("*").order("created_at", { ascending: false }).limit(3),
+  ]);
 
   return (
     <>
@@ -49,27 +49,55 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Featured products */}
-      {products && products.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 py-10 md:py-16">
+      {/* Túi xách mới nhất */}
+      {bags && bags.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 pt-10 md:pt-16">
           <div className="mb-6 flex items-center justify-between gap-4">
-            <h2 className="text-xl font-bold md:text-2xl">Mới nhất</h2>
+            <h2 className="text-xl font-bold md:text-2xl">Túi xách</h2>
             <Link
-              href="/products"
+              href="/products?category=Túi xách"
               className="shrink-0 whitespace-nowrap text-sm text-gray-500 transition hover:text-black"
             >
               Xem tất cả →
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                price={product.price}
-                image={product.image}
-              />
+          <div className="flex gap-3 md:gap-4">
+            {bags.map((product) => (
+              <div key={product.id} className="w-1/3 min-w-0">
+                <ProductCard
+                  id={product.id}
+                  name={product.name}
+                  price={product.price}
+                  image={product.image}
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Mỹ phẩm mới nhất */}
+      {cosmetics && cosmetics.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 py-10 md:py-16">
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <h2 className="text-xl font-bold md:text-2xl">Mỹ phẩm</h2>
+            <Link
+              href="/products?category=Mỹ phẩm"
+              className="shrink-0 whitespace-nowrap text-sm text-gray-500 transition hover:text-black"
+            >
+              Xem tất cả →
+            </Link>
+          </div>
+          <div className="flex gap-3 md:gap-4">
+            {cosmetics.map((product) => (
+              <div key={product.id} className="w-1/3 min-w-0">
+                <ProductCard
+                  id={product.id}
+                  name={product.name}
+                  price={product.price}
+                  image={product.image}
+                />
+              </div>
             ))}
           </div>
         </section>
@@ -113,6 +141,39 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Tuyển dụng */}
+      {jobPosts && jobPosts.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 py-10 md:py-16">
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <h2 className="text-xl font-bold md:text-2xl">Tuyển dụng Nhật Bản</h2>
+          </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {jobPosts.map((job) => (
+              <div key={job.id} className="rounded-2xl border bg-white overflow-hidden hover:shadow-md transition">
+                {job.image_url ? (
+                  <img
+                    src={job.image_url}
+                    alt={job.title}
+                    className="h-44 w-full object-cover"
+                  />
+                ) : (
+                  <div className="h-44 w-full bg-stone-100" />
+                )}
+                <div className="p-4">
+                  <p className="mb-1 text-xs text-blue-500">
+                    {new Date(job.posted_at).toLocaleDateString("vi-VN")}
+                  </p>
+                  <h3 className="mb-2 font-bold leading-snug line-clamp-2">{job.title}</h3>
+                  {job.description && (
+                    <p className="text-sm text-gray-500 line-clamp-3">{job.description}</p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* CTA bottom */}
       <section className="px-4 py-12 text-center md:py-16">

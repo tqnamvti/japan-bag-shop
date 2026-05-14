@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import { supabase } from "@/lib/supabase";
@@ -22,9 +23,14 @@ const BRANDS: Record<string, string[]> = {
   "Mỹ phẩm": ["Tất cả", "Shiseido", "SK-II", "Canmake", "Cezanne", "KOSE", "Hada Labo"],
 };
 
-export default function ProductsPage() {
+function ProductsContent() {
+  const searchParams = useSearchParams();
+  const initialCategory = searchParams.get("category");
+
   const [products, setProducts] = useState<Product[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState("Tất cả");
+  const [selectedCategory, setSelectedCategory] = useState(
+    CATEGORIES.includes(initialCategory ?? "") ? initialCategory! : "Tất cả"
+  );
   const [selectedBrand, setSelectedBrand] = useState("Tất cả");
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -79,6 +85,7 @@ export default function ProductsPage() {
     return (
       <>
         <Navbar />
+
         <main className="mx-auto max-w-7xl p-4">
           <div className="mb-4 h-9 w-52 animate-pulse rounded-xl bg-gray-200" />
           <div className="mb-4 flex gap-2">
@@ -181,5 +188,13 @@ export default function ProductsPage() {
         )}
       </main>
     </>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense>
+      <ProductsContent />
+    </Suspense>
   );
 }

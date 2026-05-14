@@ -55,20 +55,21 @@ export default function ProductCard({ id, name, price, image }: Props) {
           {price.toLocaleString()} 円
         </p>
 
-        <button
+        <div
           className="
             mt-3
             w-full
             rounded-xl
             bg-black
             py-2
+            text-center
             text-sm
             text-white
             md:text-base
           "
         >
           Đặt hàng
-        </button>
+        </div>
       </div>
     </Link>
   );

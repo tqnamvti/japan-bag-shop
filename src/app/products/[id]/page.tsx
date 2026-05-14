@@ -42,12 +42,6 @@ export default async function ProductDetailPage({ params }: Props) {
     .eq("id", id)
     .single();
 
-  const { data: related } = await supabase
-    .from("products")
-    .select("*")
-    .neq("id", id)
-    .limit(4);
-
   if (error || !product) {
     return (
       <>
@@ -57,6 +51,13 @@ export default async function ProductDetailPage({ params }: Props) {
       </>
     );
   }
+
+  const { data: related } = await supabase
+    .from("products")
+    .select("*")
+    .eq("category", product.category)
+    .neq("id", id)
+    .limit(4);
 
   return (
     <>
@@ -120,29 +121,24 @@ export default async function ProductDetailPage({ params }: Props) {
             {product.description}
           </p>
 
-          <a
-            href={`https://zalo.me/0709166103?text=${encodeURIComponent(`Mình muốn đặt hàng: ${product.name}`)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="
-              mt-8
-              block
-              w-full
-              rounded-2xl
-              bg-black
-              py-4
-              text-center
-              text-white
-              transition
-              hover:bg-stone-800
-
-              md:inline-block
-              md:w-auto
-              md:px-8
-            "
-          >
-            Đặt hàng qua Zalo
-          </a>
+          <div className="mt-8 flex flex-col gap-3 md:flex-row">
+            <a
+              href={`https://zalo.me/0709166103?text=${encodeURIComponent(`Mình muốn đặt hàng: ${product.name}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full rounded-2xl bg-black py-4 text-center text-white transition hover:bg-stone-800 md:w-auto md:px-8"
+            >
+              Đặt hàng qua Zalo
+            </a>
+            <a
+              href="https://www.facebook.com/share/1EUdKktS5F/?mibextid=wwXIfr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full rounded-2xl bg-blue-600 py-4 text-center text-white transition hover:bg-blue-700 md:w-auto md:px-8"
+            >
+              Đặt hàng qua Facebook
+            </a>
+          </div>
         </div>
         </div>
 
