@@ -37,7 +37,7 @@ export default async function HomePage() {
               Xem sản phẩm
             </Link>
             <a
-              href="https://zalo.me/YOUR_ZALO_NUMBER"
+              href="https://zalo.me/0709166103"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full rounded-2xl border border-stone-600 px-8 py-3 font-semibold transition hover:border-white hover:text-white sm:w-auto"
@@ -104,7 +104,7 @@ export default async function HomePage() {
         <p className="mb-2 text-sm text-gray-500">Cần tư vấn hoặc đặt hàng?</p>
         <h2 className="mb-6 text-2xl font-bold">Liên hệ ngay với chúng tôi</h2>
         <a
-          href="https://zalo.me/YOUR_ZALO_NUMBER"
+          href="https://zalo.me/0709166103"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block rounded-2xl bg-black px-10 py-3 font-semibold text-white transition hover:bg-stone-800"

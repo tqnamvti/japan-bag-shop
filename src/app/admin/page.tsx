@@ -26,6 +26,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [fileInputKey, setFileInputKey] = useState(0);
 
   async function fetchProducts() {
     const { data } = await supabase.from("products").select("*").order("id", {
@@ -43,14 +44,14 @@ export default function AdminPage() {
   }
 
   async function handleDelete(id: number) {
-    const confirmed = confirm("Delete this product?");
+    const confirmed = confirm("Xác nhận xóa sản phẩm này?");
 
     if (!confirmed) return;
 
     const { error } = await supabase.from("products").delete().eq("id", id);
 
     if (error) {
-      alert("Delete failed");
+      alert("Xóa thất bại");
       return;
     }
 
@@ -74,6 +75,7 @@ export default function AdminPage() {
     setFile(null);
     setDescription("");
     setEditingId(null);
+    setFileInputKey((k) => k + 1);
   }
 
   async function uploadImage(file: File): Promise<string> {
@@ -178,7 +180,7 @@ export default function AdminPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
-            placeholder="Product name"
+            placeholder="Tên sản phẩm"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="
@@ -191,7 +193,7 @@ export default function AdminPage() {
 
           <input
             type="number"
-            placeholder="Price"
+            placeholder="Giá (¥)"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             className="
@@ -203,19 +205,15 @@ export default function AdminPage() {
           />
 
           <input
+            key={fileInputKey}
             type="file"
             accept="image/*"
             onChange={(e) => setFile(e.target.files?.[0] || null)}
-            className="
-    w-full
-    rounded-xl
-    border
-    p-3
-  "
+            className="w-full rounded-xl border p-3"
           />
 
           <textarea
-            placeholder="Description"
+            placeholder="Mô tả sản phẩm"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="
@@ -238,10 +236,10 @@ export default function AdminPage() {
   "
           >
             {loading
-              ? "Saving..."
+              ? "Đang lưu..."
               : editingId
-                ? "Update Product"
-                : "Create Product"}
+                ? "Cập nhật sản phẩm"
+                : "Thêm sản phẩm"}
           </button>
         </form>
         <div className="mt-10 space-y-4">
@@ -280,7 +278,7 @@ export default function AdminPage() {
     text-white
   "
                 >
-                  Edit
+                  Sửa
                 </button>
 
                 <button
@@ -293,7 +291,7 @@ export default function AdminPage() {
     text-white
   "
                 >
-                  Delete
+                  Xóa
                 </button>
               </div>
             </div>

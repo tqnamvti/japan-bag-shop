@@ -2,7 +2,7 @@ import Link from "next/link"
 
 export default function Navbar() {
   return (
-    <header className="border-b bg-white">
+    <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur-sm">
       <div
         className="
           mx-auto
@@ -22,11 +22,11 @@ export default function Navbar() {
 
         <nav className="flex gap-4 text-sm md:text-base">
           <Link href="/">
-            Home
+            Trang chủ
           </Link>
 
           <Link href="/products">
-            Products
+            Sản phẩm
           </Link>
         </nav>
       </div>

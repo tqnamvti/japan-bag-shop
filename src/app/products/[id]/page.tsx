@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { supabase } from "@/lib/supabase";
 
@@ -22,7 +23,7 @@ export default async function ProductDetailPage({ params }: Props) {
       <>
         <Navbar />
 
-        <main className="p-4">Product not found</main>
+        <main className="p-4">Không tìm thấy sản phẩm</main>
       </>
     );
   }
@@ -31,17 +32,17 @@ export default async function ProductDetailPage({ params }: Props) {
     <>
       <Navbar />
 
-      <main
-        className="
-          mx-auto
-          grid
-          max-w-6xl
-          gap-8
-          p-4
+      <main className="mx-auto max-w-6xl p-4">
+        {/* Breadcrumb */}
+        <nav className="mb-6 flex items-center gap-2 text-sm text-gray-500">
+          <Link href="/" className="hover:text-black">Trang chủ</Link>
+          <span>/</span>
+          <Link href="/products" className="hover:text-black">Sản phẩm</Link>
+          <span>/</span>
+          <span className="text-black">{product.name}</span>
+        </nav>
 
-          md:grid-cols-2
-        "
-      >
+        <div className="grid gap-8 md:grid-cols-2">
         <div
           className="
             relative
@@ -81,21 +82,30 @@ export default async function ProductDetailPage({ params }: Props) {
             {product.description}
           </p>
 
-          <button
+          <a
+            href={`https://zalo.me/0709166103?text=${encodeURIComponent(`Mình muốn đặt hàng: ${product.name}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className="
               mt-8
+              block
               w-full
               rounded-2xl
               bg-black
               py-4
+              text-center
               text-white
+              transition
+              hover:bg-stone-800
 
+              md:inline-block
               md:w-auto
               md:px-8
             "
           >
-            Đặt hàng ngay
-          </button>
+            Đặt hàng qua Zalo
+          </a>
+        </div>
         </div>
       </main>
     </>
