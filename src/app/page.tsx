@@ -4,6 +4,8 @@ import ProductCard from "@/components/ProductCard";
 import OrderForm from "@/components/OrderForm";
 import { supabase } from "@/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const [{ data: bags }, { data: cosmetics }, { data: supplements }, { data: jobPosts }] = await Promise.all([
     supabase.from("products").select("*").eq("category", "Túi xách").order("id", { ascending: false }).limit(3),

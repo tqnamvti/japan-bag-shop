@@ -5,6 +5,8 @@ import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import { supabase } from "@/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 type Props = {
   params: Promise<{
     id: string;
