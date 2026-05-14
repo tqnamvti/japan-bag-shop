@@ -17,8 +17,8 @@ const BRANDS = ["Tất cả", "Coach", "Gucci", "Furla", "Michael Kors", "Prada"
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [filtered, setFiltered] = useState<Product[]>([]);
   const [selectedBrand, setSelectedBrand] = useState("Tất cả");
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,25 +27,29 @@ export default function ProductsPage() {
       .select("*")
       .order("id", { ascending: false })
       .then(({ data }) => {
-        if (data) {
-          setProducts(data);
-          setFiltered(data);
-        }
+        if (data) setProducts(data);
         setLoading(false);
       });
   }, []);
 
-  function handleFilter(brand: string) {
-    setSelectedBrand(brand);
-    if (brand === "Tất cả") {
-      setFiltered(products);
-    } else {
-      setFiltered(
-        products.filter((p) =>
-          p.name.toLowerCase().includes(brand.toLowerCase())
-        )
-      );
-    }
+  function countByBrand(brand: string) {
+    if (brand === "Tất cả") return products.length;
+    return products.filter((p) =>
+      p.name.toLowerCase().includes(brand.toLowerCase())
+    ).length;
+  }
+
+  const displayed = products.filter((p) => {
+    const matchesBrand =
+      selectedBrand === "Tất cả" ||
+      p.name.toLowerCase().includes(selectedBrand.toLowerCase());
+    const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase().trim());
+    return matchesBrand && matchesSearch;
+  });
+
+  function handleReset() {
+    setSelectedBrand("Tất cả");
+    setSearch("");
   }
 
   if (loading) {
@@ -54,6 +58,7 @@ export default function ProductsPage() {
         <Navbar />
         <main className="mx-auto max-w-7xl p-4">
           <div className="mb-4 h-9 w-52 animate-pulse rounded-xl bg-gray-200" />
+          <div className="mb-4 h-11 w-full animate-pulse rounded-xl bg-gray-200" />
           <div className="mb-6 flex gap-2">
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="h-9 w-24 animate-pulse rounded-full bg-gray-200" />
@@ -81,28 +86,37 @@ export default function ProductsPage() {
       <main className="mx-auto max-w-7xl p-4">
         <h1 className="mb-6 text-3xl font-bold">Tất cả sản phẩm</h1>
 
+        {/* Search */}
+        <input
+          type="text"
+          placeholder="Tìm kiếm sản phẩm..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="mb-4 w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none focus:border-black"
+        />
+
         {/* Filter */}
         <div className="mb-6 flex flex-wrap gap-2">
           {BRANDS.map((brand) => (
             <button
               key={brand}
-              onClick={() => handleFilter(brand)}
+              onClick={() => setSelectedBrand(brand)}
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                 selectedBrand === brand
                   ? "bg-black text-white"
                   : "border border-gray-300 hover:border-black"
               }`}
             >
-              {brand}
+              {brand} ({countByBrand(brand)})
             </button>
           ))}
         </div>
 
-        {filtered.length === 0 ? (
+        {displayed.length === 0 ? (
           <div className="py-24 text-center text-gray-400">
-            <p className="text-lg">Không có sản phẩm nào</p>
+            <p className="text-lg">Không tìm thấy sản phẩm nào</p>
             <button
-              onClick={() => handleFilter("Tất cả")}
+              onClick={handleReset}
               className="mt-4 text-sm underline hover:text-black"
             >
               Xem tất cả sản phẩm
@@ -110,7 +124,7 @@ export default function ProductsPage() {
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-            {filtered.map((product) => (
+            {displayed.map((product) => (
               <ProductCard
                 key={product.id}
                 id={product.id}

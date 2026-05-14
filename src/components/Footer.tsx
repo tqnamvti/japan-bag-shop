@@ -53,7 +53,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="transition hover:text-white"
                 >
-                  Facebook: Japan Bag Shop
+                  Facebook: Bảo Ngọc
                 </a>
               </li>
             </ul>

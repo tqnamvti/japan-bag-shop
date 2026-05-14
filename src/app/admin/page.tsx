@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import { supabase } from "@/lib/supabase";
 
@@ -255,10 +256,19 @@ export default function AdminPage() {
         p-4
       "
             >
-              <div>
-                <h2 className="font-bold">{product.name}</h2>
-
-                <p>¥{product.price.toLocaleString()}</p>
+              <div className="flex items-center gap-3">
+                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl">
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div>
+                  <h2 className="font-bold">{product.name}</h2>
+                  <p className="text-sm text-gray-500">¥{product.price.toLocaleString()}</p>
+                </div>
               </div>
 
               <div className="flex gap-2">
