@@ -61,16 +61,15 @@ export default async function HomePage() {
               Xem tất cả →
             </Link>
           </div>
-          <div className="flex gap-3 md:gap-4">
+          <div className="grid grid-cols-3 gap-3 md:gap-4">
             {bags.map((product) => (
-              <div key={product.id} className="w-1/3 min-w-0">
-                <ProductCard
-                  id={product.id}
-                  name={product.name}
-                  price={product.price}
-                  image={product.image}
-                />
-              </div>
+              <ProductCard
+                key={product.id}
+                id={product.id}
+                name={product.name}
+                price={product.price}
+                image={product.image}
+              />
             ))}
           </div>
         </section>
@@ -88,16 +87,15 @@ export default async function HomePage() {
               Xem tất cả →
             </Link>
           </div>
-          <div className="flex gap-3 md:gap-4">
+          <div className="grid grid-cols-3 gap-3 md:gap-4">
             {cosmetics.map((product) => (
-              <div key={product.id} className="w-1/3 min-w-0">
-                <ProductCard
-                  id={product.id}
-                  name={product.name}
-                  price={product.price}
-                  image={product.image}
-                />
-              </div>
+              <ProductCard
+                key={product.id}
+                id={product.id}
+                name={product.name}
+                price={product.price}
+                image={product.image}
+              />
             ))}
           </div>
         </section>
