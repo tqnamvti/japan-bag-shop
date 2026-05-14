@@ -34,7 +34,7 @@ export default function OrderForm() {
 
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from("orders")
-        .upload(fileName, file, { upsert: true });
+        .upload(fileName, file);
 
       if (uploadError) throw new Error("Upload ảnh thất bại");
 
