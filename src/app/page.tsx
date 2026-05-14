@@ -51,7 +51,7 @@ export default async function HomePage() {
 
       {/* Túi xách mới nhất */}
       {bags && bags.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 pt-10 md:pt-16">
+        <section className="mx-auto w-full max-w-7xl px-4 pt-10 md:pt-16">
           <div className="mb-6 flex items-center justify-between gap-4">
             <h2 className="text-xl font-bold md:text-2xl">Túi xách</h2>
             <Link
@@ -77,7 +77,7 @@ export default async function HomePage() {
 
       {/* Mỹ phẩm mới nhất */}
       {cosmetics && cosmetics.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 py-10 md:py-16">
+        <section className="mx-auto w-full max-w-7xl px-4 py-10 md:py-16">
           <div className="mb-6 flex items-center justify-between gap-4">
             <h2 className="text-xl font-bold md:text-2xl">Mỹ phẩm</h2>
             <Link
@@ -142,7 +142,7 @@ export default async function HomePage() {
 
       {/* Tuyển dụng */}
       {jobPosts && jobPosts.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 py-10 md:py-16">
+        <section className="mx-auto w-full max-w-7xl px-4 py-10 md:py-16">
           <div className="mb-6 flex items-center justify-between gap-4">
             <h2 className="text-xl font-bold md:text-2xl">Tuyển dụng Nhật Bản</h2>
           </div>
