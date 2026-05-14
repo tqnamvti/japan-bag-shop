@@ -87,7 +87,15 @@ export default async function HomePage() {
               Xem tất cả →
             </Link>
           </div>
-          <div className="grid grid-cols-3 gap-3 md:gap-4">
+          <div
+            className={`grid gap-3 md:gap-4 ${
+              cosmetics.length === 1
+                ? "max-w-[33.333%] grid-cols-1"
+                : cosmetics.length === 2
+                ? "max-w-[66.666%] grid-cols-2"
+                : "grid-cols-3"
+            }`}
+          >
             {cosmetics.map((product) => (
               <ProductCard
                 key={product.id}
