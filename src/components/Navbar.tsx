@@ -28,6 +28,10 @@ export default function Navbar() {
           <Link href="/products">
             Sản phẩm
           </Link>
+
+          <Link href="/memories">
+            Kỉ Niệm
+          </Link>
         </nav>
       </div>
     </header>
