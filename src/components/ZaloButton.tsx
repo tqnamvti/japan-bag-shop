@@ -6,7 +6,7 @@ export default function ZaloButton() {
       href="https://zalo.me/0709166103"
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-1"
+      className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-1 print:hidden"
       aria-label="Liên hệ Zalo"
     >
       <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-[#0068FF] shadow-lg transition hover:scale-110">

@@ -8,8 +8,11 @@ export default function Navbar() {
           mx-auto
           flex
           max-w-7xl
+          flex-wrap
           items-center
           justify-between
+          gap-x-4
+          gap-y-2
           p-4
         "
       >
@@ -31,6 +34,10 @@ export default function Navbar() {
 
           <Link href="/memories">
             Kỉ Niệm
+          </Link>
+
+          <Link href="/diary">
+            Nhật kí
           </Link>
         </nav>
       </div>

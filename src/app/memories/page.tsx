@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Be_Vietnam_Pro, Cormorant_Garamond } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Reveal from "@/components/Reveal";
+import { serif, sans } from "@/lib/fonts";
 import {
   breakup,
   closing,
@@ -13,19 +13,6 @@ import {
   places,
   present,
 } from "@/data/memories";
-
-const serif = Cormorant_Garamond({
-  subsets: ["latin", "vietnamese"],
-  weight: ["400", "500"],
-  style: ["normal", "italic"],
-  variable: "--font-serif",
-});
-
-const sans = Be_Vietnam_Pro({
-  subsets: ["latin", "vietnamese"],
-  weight: ["300", "400", "500"],
-  variable: "--font-vn",
-});
 
 export const metadata: Metadata = {
   title: "Kỉ Niệm — Bảo Ngọc Order",
