@@ -5,7 +5,6 @@
 export const hero = {
   period: "2021 — 2025",
   title: "Những gì còn lại",
-  subtitle: "Bốn năm, kể lại theo thứ tự mà tôi vẫn nhớ chúng.",
 };
 
 export const firstMeeting = {

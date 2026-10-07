@@ -90,12 +90,6 @@ export default function MemoriesPage() {
           >
             {hero.title}
           </Reveal>
-          <Reveal
-            as="p"
-            className="m-0 max-w-[520px] font-[family-name:var(--font-serif)] text-[clamp(20px,2.4vw,26px)] leading-normal text-[#b8ae9f] [text-wrap:pretty]"
-          >
-            {hero.subtitle}
-          </Reveal>
           <Reveal className="mt-12 h-[72px] w-px bg-gradient-to-b from-[#a39a8c] to-transparent" />
         </section>
 
