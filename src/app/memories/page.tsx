@@ -46,7 +46,7 @@ function SectionHead({
 }) {
   return (
     <>
-      <div className={`absolute -left-1 top-[92px] h-[9px] w-[9px] rounded-full ${dot}`} />
+      <div className={`absolute -left-1 top-[60px] h-[9px] md:top-[92px] w-[9px] rounded-full ${dot}`} />
       <Reveal className="flex flex-wrap items-baseline gap-4">
         <span className="text-[13px] tracking-[0.25em] text-[#c9a29a]">{index}</span>
         <span className="text-[13px] uppercase tracking-[0.15em] text-[#a39a8c]">{date}</span>
@@ -71,7 +71,7 @@ function Photo({ src, alt, aspect }: { src: string; alt: string; aspect: string 
 }
 
 const body = "m-0 max-w-[560px] text-[17px] leading-[1.85] text-[#cfc6b8] [text-wrap:pretty]";
-const section = "relative flex flex-col gap-7 py-20 pl-12";
+const section = "relative flex flex-col gap-6 py-12 pl-10 md:gap-7 md:py-20 md:pl-12";
 
 export default function MemoriesPage() {
   return (
@@ -82,7 +82,7 @@ export default function MemoriesPage() {
         className={`${serif.variable} ${sans.variable} min-h-screen w-full bg-[#15120f] font-[family-name:var(--font-vn)] font-light text-[#e9e2d6] selection:bg-[#c9a29a] selection:text-[#15120f]`}
       >
         {/* Mở đầu */}
-        <section className="flex min-h-[90vh] flex-col items-center justify-center gap-8 px-6 py-20 text-center">
+        <section className="flex flex-col items-center justify-center gap-6 px-6 pb-4 pt-16 text-center md:gap-8 md:pb-8 md:pt-28">
           <Reveal className="text-[13px] uppercase tracking-[0.3em] text-[#a39a8c]">{hero.period}</Reveal>
           <Reveal
             as="h1"
@@ -90,11 +90,11 @@ export default function MemoriesPage() {
           >
             {hero.title}
           </Reveal>
-          <Reveal className="mt-12 h-[72px] w-px bg-gradient-to-b from-[#a39a8c] to-transparent" />
+          <Reveal className="mt-4 h-12 w-px md:mt-8 md:h-[72px] bg-gradient-to-b from-[#a39a8c] to-transparent" />
         </section>
 
-        <div className="relative mx-auto max-w-[880px] px-6 pb-[120px]">
-          <div className="absolute bottom-[120px] left-6 top-0 w-px bg-[#3a332c]" />
+        <div className="relative mx-auto max-w-[880px] px-6 pb-12 md:pb-[120px]">
+          <div className="absolute bottom-12 left-6 top-0 md:bottom-[120px] w-px bg-[#3a332c]" />
 
           {/* 01 */}
           <section className={section}>
@@ -171,14 +171,14 @@ export default function MemoriesPage() {
           </section>
 
           {/* 06 */}
-          <section className="relative flex flex-col gap-7 pb-10 pl-12 pt-20">
+          <section className="relative flex flex-col gap-6 pb-6 pl-10 pt-12 md:gap-7 md:pb-10 md:pl-12 md:pt-20">
             <SectionHead index="06" date={present.date} title={present.title} dot="bg-[#efe6d8]" />
             <Photo src={present.image} alt={present.title} aspect="aspect-[16/10]" />
             <Reveal as="p" className={body}>{present.text}</Reveal>
           </section>
         </div>
 
-        <footer className="flex flex-col items-center gap-4 px-6 pb-[120px] pt-20 text-center">
+        <footer className="flex flex-col items-center gap-4 px-6 pb-16 pt-8 text-center md:pb-[120px] md:pt-20">
           <Reveal
             as="p"
             className="m-0 font-[family-name:var(--font-serif)] text-[clamp(24px,3vw,32px)] italic text-[#b8ae9f]"
